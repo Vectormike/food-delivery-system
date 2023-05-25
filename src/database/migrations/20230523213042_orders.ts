@@ -2,63 +2,42 @@ import { Knex } from 'knex';
 
 export async function up(knex: Knex): Promise<void> {
   await knex.schema.createTable('orders', (table) => {
-    table.uuid('id').primary();
-    table.uuid('user_id');
-    table.boolean('completed').defaultTo(false);
-    table.boolean('cancelled').defaultTo(false);
-    table.boolean('kitchen_cancelled').defaultTo(false);
-    table.boolean('kitchen_accepted').defaultTo(false);
-    table.boolean('kitchen_dispatched').defaultTo(false);
-    table.timestamp('kitchen_dispatched_time');
-    table.timestamp('completed_time');
-    table.uuid('rider_id');
-    table.boolean('kitchen_prepared').defaultTo(false);
-    table.boolean('rider_assigned').defaultTo(false);
-    table.boolean('paid').defaultTo(false);
+    table.increments('id').primary();
+    table.integer('user_id').notNullable();
+    table.boolean('completed').nullable();
+    table.boolean('cancelled').nullable();
+    table.boolean('kitchen_cancelled').nullable();
+    table.boolean('kitchen_accepted').nullable();
+    table.boolean('kitchen_dispatched').nullable();
+    table.string('kitchen_dispatched_time');
+    table.timestamp('completed_time').defaultTo(knex.fn.now());
+    table.integer('rider_id');
+    table.boolean('kitchen_prepared').nullable();
+    table.boolean('rider_assigned').nullable();
+    table.boolean('paid').nullable();
     table.string('order_code');
-    table.string('order_change').nullable();
-    table.uuid('calculated_order_id');
-    table.timestamp('created_at').defaultTo(knex.fn.now());
-    table.timestamp('updated_at').defaultTo(knex.fn.now());
-    table.jsonb('logs');
-    table.timestamp('kitchen_verified_time');
-    table.timestamp('kitchen_completed_time');
-    table.boolean('shop_accepted').defaultTo(false);
-    table.boolean('shop_prepared').defaultTo(false);
-    table.integer('no_of_mealbags_delivered').defaultTo(0);
-    table.integer('no_of_drinks_delivered').defaultTo(0);
+    table.string('order_change');
+    table.integer('calculated_order_id').nullable();
+    table.string('kitchen_verified_time');
+    table.string('kitchen_completed_time');
+    table.boolean('shop_accepted').nullable();
+    table.boolean('shop_prepared').nullable();
+    table.integer('no_of_mealbags_delivered').nullable();
+    table.integer('no_of_drinks_delivered').nullable();
     table.timestamp('rider_started_time').nullable();
-    table.boolean('rider_started').defaultTo(false);
+    table.boolean('rider_started').nullable();
     table.timestamp('rider_arrived_time').nullable();
-    table.boolean('rider_arrived').defaultTo(false);
-    table.boolean('is_failed_trip').defaultTo(false);
-    table.jsonb('failed_trip_details');
+    table.boolean('rider_arrived').nullable();
+    table.boolean('is_failed_trip').nullable();
+    table.text('failed_trip_details');
     table.string('box_number');
-    table.uuid('shelf_id').nullable();
-    table.jsonb('order_total_amount_history');
-    table.boolean('scheduled').defaultTo(false);
-    table.uuid('confirmed_by_id').nullable();
-    table.uuid('completed_by_id').nullable();
-    table.date('scheduled_delivery_date').nullable();
-    table.time('scheduled_delivery_time').nullable();
-    table.boolean('is_hidden').defaultTo(false);
-    table.uuid('calculated_order');
-    table.uuid('order_type');
-
-    table.foreign('user_id').references('id').inTable('users');
-    table.foreign('rider_id').references('id').inTable('riders');
-    table
-      .foreign('calculated_order_id')
-      .references('id')
-      .inTable('calculated_orders');
-    table.foreign('shelf_id').references('id').inTable('shelves');
-    table.foreign('confirmed_by_id').references('id').inTable('users');
-    table.foreign('completed_by_id').references('id').inTable('users');
-    table
-      .foreign('calculated_order')
-      .references('id')
-      .inTable('calculated_orders');
-    table.foreign('order_type').references('id').inTable('order_types');
+    table.integer('shelf_id');
+    table.boolean('scheduled').nullable();
+    table.integer('confirmed_by_id');
+    table.integer('completed_by_id');
+    table.date('scheduled_delivery_date');
+    table.time('scheduled_delivery_time');
+    table.boolean('is_hidden').nullable();
     table.timestamps(true, true);
   });
 }
