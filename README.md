@@ -2,6 +2,18 @@
   <img src="https://res.cloudinary.com/class-attend/image/upload/v1673013921/logo_d3czjj.png" width="200" alt="FoodCourt Logo" />
 </p>
 
+
+## Description
+
+The Food Delivery System is designed to handle the ordering process, track order details, log system activities, and provide integration with RabbitMQ for real-time communication.
+
+The main components of the system include:
+
+- Orders: Represents customer orders placed in the system.
+- Logs: Tracks system activities and events.
+- OrderTotalAmountHistory: Keeps a record of the total amount history for orders.
+- CalculatedOrder: Stores calculated order details.
+- OrderType: Defines different types of orders.
 ## Installation
 
 ```bash
@@ -50,17 +62,6 @@ $ npm run start:prod
 
 ```
 
-## Description
-
-The Food Delivery System is designed to handle the ordering process, track order details, log system activities, and provide integration with RabbitMQ for real-time communication.
-
-The main components of the system include:
-
-- Orders: Represents customer orders placed in the system.
-- Logs: Tracks system activities and events.
-- OrderTotalAmountHistory: Keeps a record of the total amount history for orders.
-- CalculatedOrder: Stores calculated order details.
-- OrderType: Defines different types of orders.
 
 ## **Database Models**
 
