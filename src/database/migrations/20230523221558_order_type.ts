@@ -1,10 +1,9 @@
 import { Knex } from 'knex';
 
 export async function up(knex: Knex): Promise<void> {
-  // Order Type
   await knex.schema.createTable('order_types', (table) => {
-    table.uuid('id').primary();
-    table.string('name').notNullable();
+    table.increments('id').primary();
+    table.string('name').nullable();
     table.timestamps(true, true);
   });
 }

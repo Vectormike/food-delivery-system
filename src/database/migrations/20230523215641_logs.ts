@@ -3,12 +3,10 @@ import { Knex } from 'knex';
 export async function up(knex: Knex): Promise<void> {
   // Logs
   await knex.schema.createTable('logs', (table) => {
-    table.uuid('id').primary();
-    table.uuid('order_id');
-    table.timestamp('time');
-    table.string('description');
-
-    table.foreign('order_id').references('id').inTable('orders');
+    table.increments('id').primary();
+    table.integer('order_id').nullable();
+    table.string('time').nullable();
+    table.text('description').nullable();
     table.timestamps(true, true);
   });
 }

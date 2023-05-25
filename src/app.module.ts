@@ -1,13 +1,18 @@
-import { Module } from '@nestjs/common';
+import { Injectable, Module, OnModuleInit } from '@nestjs/common';
 import { AppController } from './app.controller';
-import { UserModule } from './user/user.module';
-import { AddonModule } from './addon/addon.module';
-import { BrandModule } from './brand/brand.module';
-import { DatabaseModule } from './database/database.module'
-import { AuthModule } from './auth/auth.module';
+import { DatabaseModule } from './database/database.module';
+import { OrderModule } from './order/order.module';
+import { RabbitMQService } from '.././src/rabbitmq/rabbitmq.service';
 
 @Module({
   controllers: [AppController],
-  imports: [UserModule, AddonModule, BrandModule, DatabaseModule, AuthModule],
+  providers: [RabbitMQService],
+  imports: [DatabaseModule, OrderModule],
 })
-export class AppModule {}
+export class AppModule implements OnModuleInit {
+  constructor(private readonly rabbitMQService: RabbitMQService) {}
+
+  onModuleInit() {
+    this.rabbitMQService.startListening();
+  }
+}

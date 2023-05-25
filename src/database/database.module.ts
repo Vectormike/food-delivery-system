@@ -1,10 +1,10 @@
 import 'dotenv/config';
 import { Module, Global } from '@nestjs/common';
-import AddonModel from './models/order.model';
-import BrandModel from './models/log.model';
+import OrderModel from './models/order.model';
+import LogModel from './models/log.model';
 import BaseModel from './models/base.model';
-import UserModel from './models/calculatedOrder.model';
-import CategoryModel from './models/orderTotalAmountHistory.model';
+import CalculatedOrderModel from './models/calculatedOrder.model';
+import OrderTotalAmountHistory from './models/orderTotalAmountHistory.model';
 import { ObjectionModule } from '@willsoto/nestjs-objection';
 
 @Global()
@@ -31,10 +31,10 @@ import { ObjectionModule } from '@willsoto/nestjs-objection';
       },
     }),
     ObjectionModule.forFeature([
-      AddonModel,
-      BrandModel,
-      UserModel,
-      CategoryModel,
+      OrderModel,
+      LogModel,
+      CalculatedOrderModel,
+      OrderTotalAmountHistory,
     ]),
   ],
   exports: [ObjectionModule],

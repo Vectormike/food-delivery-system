@@ -9,7 +9,7 @@ export class RabbitMQService {
 
   async startListening() {
     try {
-      const connection = await connect('amqp://localhost');
+      const connection = await connect('amqp://localhost:5672');
       const channel = await connection.createChannel();
 
       // Declare the queue to consume from
