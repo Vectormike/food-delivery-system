@@ -1,3 +1,4 @@
+import { AddressDetails, Meal } from "src/order/order.interface";
 import BaseModel from "./base.model";
 
 export default class CalculatedOrderModel extends BaseModel {
