@@ -62,7 +62,3 @@ $ npm run start:prod
 
 ```
 
-
-## **Database Models**
-
-This section describes the various tables in which data is stored and the relationship between them. Below an image showing the tables.
