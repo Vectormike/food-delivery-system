@@ -23,11 +23,11 @@ export class RabbitMQService {
       channel.consume(this.queueName, (message) => {
         if (message.content) {
           const order = JSON.parse(message.content.toString());
-          this.logger.log(`Received order: ${order.id}`);
+          this.logger.log(`Received order: ${order}`);
 
           // Perform the desired action with the received order
           // For this test, we will log a statement to the console
-          this.logger.log(`Order received: ${order.id}`);
+          this.logger.log(`Order received: ${order}`);
         }
 
         // Acknowledge the message to remove it from the queue
@@ -41,7 +41,7 @@ export class RabbitMQService {
   async publishOrderCreated(order: Order) {
     try {
       // Connect to RabbitMQ server
-      const connection = await connect('amqp://localhost');
+      const connection = await connect('amqp://localhost:5672');
       const channel = await connection.createChannel();
 
       // Declare the queue to publish to
