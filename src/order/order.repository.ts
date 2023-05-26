@@ -2,6 +2,7 @@
 import {
   Injectable,
   InternalServerErrorException,
+  Logger,
 } from '@nestjs/common';
 import knex from '../database';
 import { Knex } from 'knex';
@@ -47,49 +48,61 @@ export class OrderRepository {
         };
       });
 
-      // Access the inserted data
-      const {
-        calculatedOrder,
-        orderTotalAmountHistory,
-        logs,
-        orderType,
-        order,
-      } = insertedData;
-
-      // Process the inserted data if needed
-
       return insertedData;
     } catch (error) {
-      // Handle the error
-      console.error(error);
+      Logger.error(error);
+      throw new error();
     }
   }
 
   async getAllOrders() {
-    try {
-      const orders = await knex.raw(
-        `SELECT orders.*, calculated_orders.*, logs.*, order_total_amount_history.* FROM orders
-        LEFT JOIN calculated_orders ON orders.calculated_order_id = calculated_orders.id
-        LEFT JOIN logs ON orders.id = logs.order_id
-        LEFT JOIN order_total_amount_history ON orders.id = order_total_amount_history.order_id`,
-      );
-      return orders.rows;
-    } catch (error) {
-      throw new InternalServerErrorException(error);
+    const orders = await knex.raw(
+      `
+      SELECT *
+      FROM orders
+      LEFT JOIN calculated_orders ON orders.calculated_order_id = calculated_orders.id
+      `,
+    );
+    console.log(orders);
+    if (!orders) {
+      throw new InternalServerErrorException('No orders found');
     }
+    return orders[0][0];
   }
 
   async getHighestQuantityMeal() {
-    try {
-      const highestQuantityMeal = await knex.raw(
-        `SELECT meals.name, meals.quantity FROM calculated_orders
-        LEFT JOIN meals ON calculated_orders.meals = meals.id
-        ORDER BY meals.quantity DESC
-        LIMIT 1`,
-      );
-      return highestQuantityMeal.rows;
-    } catch (error) {
-      throw new InternalServerErrorException(error);
+    // Get calculated order id from orders table
+    const calculatedOrderId = await knex.raw(
+      `
+      SELECT calculated_order_id
+      FROM orders
+      `,
+    );
+
+    // Find calculated order with calculated order id
+    const calculatedOrder = await knex.raw(
+      `
+      SELECT *
+      FROM calculated_orders
+      WHERE id = ${calculatedOrderId[0][0].calculated_order_id}
+      `,
+    );
+
+    // Find the meal with the highest quantity
+    let highestQuantity = 0;
+    let highestQuantityMeal = null;
+
+    for (const meal of calculatedOrder[0][0].meals) {
+      const quantity = meal.quantity || 0;
+      if (quantity > highestQuantity) {
+        highestQuantity = quantity;
+        highestQuantityMeal = meal;
+      }
     }
+
+    return {
+      name: highestQuantityMeal.name,
+      quantity: highestQuantityMeal.quantity,
+    };
   }
 }

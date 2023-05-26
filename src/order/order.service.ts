@@ -31,7 +31,8 @@ export class OrderService {
       const orders = await this.orderRepository.getAllOrders();
       return orders;
     } catch (error) {
-      throw new InternalServerErrorException(error);
+      this.logger.error(error);
+      throw new InternalServerErrorException('Error getting orders');
     }
   }
 
