@@ -41,7 +41,7 @@ export class RabbitMQService {
   async publishOrderCreated(order: Order) {
     try {
       // Connect to RabbitMQ server
-      const connection = await connect('amqp://localhost');
+      const connection = await connect('amqp://localhost:5672');
       const channel = await connection.createChannel();
 
       // Declare the queue to publish to
