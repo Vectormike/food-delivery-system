@@ -1,4 +1,4 @@
-import { Controller, Post, Body } from '@nestjs/common';
+import { Controller, Post, Body, Get } from '@nestjs/common';
 import { CreateOrderDTO } from '../order/dto/order.dto';
 import { OrderService } from './order.service';
 import { HelperService } from '../utils/helpers';
@@ -19,7 +19,21 @@ export class OrderController {
     );
   }
 
-  
+  @Get()
+  async getAllOrders() {
+    const orders = await this.orderService.getAllOrders();
+    return this.helperService.sendObjectResponse(
+      'Orders retrieved successfully',
+      orders,
+    );
+  }
 
-
+  @Get('/highest-quantity-meal')
+  async getHighestQuantityMeal() {
+    const highestQuantityMeal = await this.orderService.getHighestQuantityMeal();
+    return this.helperService.sendObjectResponse(
+      'Highest quantity meal retrieved successfully',
+      highestQuantityMeal,
+    );
+  }
 }
